@@ -1,14 +1,12 @@
 import TryCatch from "./try-catch.js";
 import { psql } from "./config/database.js";
 export const getAlbums = TryCatch(async (req, res) => {
-    console.log("HI HII");
     const albums = await psql `
 	SELECT * FROM albums
 	`;
     return res.json(albums);
 });
 export const getSongs = TryCatch(async (req, res) => {
-    console.log("HI HII");
     const songs = await psql `
 		SELECT * FROM songs
 	`;
