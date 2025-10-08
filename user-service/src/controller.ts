@@ -5,12 +5,18 @@ import TryCatch from "./try-catch.js";
 import type { AuthenticatedRequest } from "./middleware.js";
 
 export const registerUser = TryCatch(async (req, res) => {
-	const { name, email, password } = req.body;
+	const { name, email, password, role = "user" } = req.body;
 
 	let user = await User.findOne({ email });
 	if (user) {
 		return res.status(500).json({
 			message: "User already exists"
+		});
+	}
+
+	if (!["admin", "user"].includes(role)) {
+		return res.status(500).json({
+			message: "Incorrect role passed"
 		});
 	}
 
@@ -29,7 +35,8 @@ export const registerUser = TryCatch(async (req, res) => {
 	return res.status(200).json({
 		message: "User registered successfully",
 		user,
-		token
+		token,
+		role
 	});
 });
 
