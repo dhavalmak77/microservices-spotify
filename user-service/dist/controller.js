@@ -19,7 +19,8 @@ export const registerUser = TryCatch(async (req, res) => {
     user = await User.create({
         name,
         email,
-        password: hashPassword
+        password: hashPassword,
+        role
     });
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
         expiresIn: "7d"
@@ -27,8 +28,7 @@ export const registerUser = TryCatch(async (req, res) => {
     return res.status(200).json({
         message: "User registered successfully",
         user,
-        token,
-        role
+        token
     });
 });
 export const loginUser = TryCatch(async (req, res) => {
