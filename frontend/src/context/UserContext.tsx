@@ -13,14 +13,15 @@ export interface User {
 }
 
 interface UserContextType {
-    user: User | null;
-    setUser: (user: User | null) => void;
-    loading: boolean;
-    setLoading: (loading: boolean) => void;
-    fetchUser: () => Promise<void>;
-    isAuth: boolean;
-    loginUser: (email: string, password: string, navigate: (path: string) => void) => Promise<void>;
-    btnLoading: boolean;
+	user: User | null;
+	setUser: (user: User | null) => void;
+	loading: boolean;
+	setLoading: (loading: boolean) => void;
+	fetchUser: () => Promise<void>;
+	isAuth: boolean;
+	loginUser: (email: string, password: string, navigate: (path: string) => void) => Promise<void>;
+	registerUser: (name: string, email: string, password: string, navigate: (path: string) => void) => Promise<void>;
+	btnLoading: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -39,6 +40,28 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         setBtnLoading(true);
         try {
 			const { data } = await axios.post(`${server}/api/v1/user/login`, {
+				email,
+				password
+			});
+
+			toast.success(data.message);
+			localStorage.setItem('token', data.token);
+			setUser(data.user);
+			setIsAuth(true);
+			setBtnLoading(false);
+			navigate('/');
+		} catch (error: any | Error) {
+			console.log('Error while login user', error);
+			toast.error(error.response?.data?.message || (error).message);
+			setBtnLoading(false);
+		}
+    }
+
+    const registerUser = async (name: string, email: string, password: string, navigate: (path: string) => void) => {
+        setBtnLoading(true);
+        try {
+			const { data } = await axios.post(`${server}/api/v1/user/register`, {
+                name,
 				email,
 				password
 			});
@@ -77,7 +100,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         fetchUser();
     }, []);
 
-    return <UserContext.Provider value={{ user, setUser, loading, setLoading, fetchUser, isAuth, loginUser, btnLoading }}>{children}<Toaster /></UserContext.Provider>;
+    return (
+		<UserContext.Provider value={{ user, setUser, loading, setLoading, fetchUser, isAuth, loginUser, registerUser, btnLoading }}>
+			{children}
+			<Toaster />
+		</UserContext.Provider>
+	);
 }
 
 export const useUserData = (): UserContextType => {

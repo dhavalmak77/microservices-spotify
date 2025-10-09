@@ -1,33 +1,45 @@
-import { useState } from "react";
-import { useUserData } from "../context/UserContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { useUserData } from '../context/UserContext';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Login = () => {
-	const [email, setEmail] = useState<string>("");
-	const [password, setPassword] = useState<string>("");
+const Register = () => {
+	const [name, setName] = useState<string>('');
+	const [email, setEmail] = useState<string>('');
+	const [password, setPassword] = useState<string>('');
 
 	const navigate = useNavigate();
-	const { loginUser, btnLoading } = useUserData();
+	const { registerUser, btnLoading } = useUserData();
 
 	const submitHandler = async (e: any) => {
 		e.preventDefault();
-		await loginUser(email, password, navigate);
+		await registerUser(name, email, password, navigate);
 	};
 
 	return (
 		<div className='flex items-center justify-center h-screen max-h-screen'>
 			<div className='bg-black text-white p-8 rounded-lg shadow-lg max-w-md w-full'>
-				<h2 className='text-3xl font-bold text-center mb-8'>Login to Spotify</h2>
+				<h2 className='text-3xl font-bold text-center mb-8'>Register to Spotify</h2>
 
 				<form
 					className='mt-8'
 					onSubmit={submitHandler}
 				>
 					<div className='mb-4'>
-						<label className='block text-sm font-medium mb-1'>Email or Username</label>
+						<label className='block text-sm font-medium mb-1'>Name</label>
+						<input
+							type='text'
+							placeholder='Enter name'
+							className='auth-input'
+							value={name}
+							onChange={(e) => setName(e.target.value)}
+							required
+						/>
+					</div>
+					<div className='mb-4'>
+						<label className='block text-sm font-medium mb-1'>Email</label>
 						<input
 							type='email'
-							placeholder='Enter email or username'
+							placeholder='Enter email'
 							className='auth-input'
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
@@ -50,17 +62,17 @@ const Login = () => {
 						className='auth-btn'
 						disabled={btnLoading}
 					>
-						{btnLoading ? 'Logging in...' : 'Login'}
+						{btnLoading ? 'Registering...' : 'Register'}
 					</button>
 				</form>
 
 				<div className='text-center mt-6 text-sm text-gray-400'>
-					Don't have an account?{' '}
+					Already have an account?{' '}
 					<Link
-						to={'/register'}
+						to={'/login'}
 						className='hover:text-gray-300'
 					>
-						Register now
+						Login now
 					</Link>
 				</div>
 			</div>
@@ -68,4 +80,4 @@ const Login = () => {
 	);
 };
 
-export default Login;
+export default Register;
