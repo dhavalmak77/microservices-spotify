@@ -43,9 +43,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 				password
 			});
 
-            debugger;
-            console.log(data);
-            return;
 			toast.success(data.message);
 			localStorage.setItem('token', data.token);
 			setUser(data.user);
