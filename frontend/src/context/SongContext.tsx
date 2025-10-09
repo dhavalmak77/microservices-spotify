@@ -49,7 +49,7 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
 	const [index, setIndex] = useState<number>(0);
 
 	const fetchSongs = useCallback(async () => {
-		setLoading(true);
+		// setLoading(() => true);
 
 		try {
 			const { data } = await axios.get<Song[]>(`${server}/api/v1/songs`);
@@ -62,7 +62,7 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
 		} catch (error) {
 			console.log("Error while fetch songs", error);
 		} finally {
-			setLoading(false);
+			setLoading(() => false);
 		}
 	}, []);
 
@@ -71,7 +71,7 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
 			return;
 		}
 
-		setLoading(true);
+		// setLoading(() => true);
 
 		try {
 			const { data } = await axios.get<Song>(`${server}/api/v1/song/${selectedSong}`);
@@ -79,12 +79,12 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
 		} catch (error) {
 			console.log("Error while fetch song", error);
 		} finally {
-			setLoading(false);
+			setLoading(() => false);
 		}
 	}, [selectedSong]);
 
 	const fetchAlbums = useCallback(async () => {
-		setLoading(true);
+		// setLoading(() => true);
 
 		try {
 			const { data } = await axios.get<Album[]>(`${server}/api/v1/albums`);
@@ -92,7 +92,7 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
 		} catch (error) {
 			console.log("Error while fetch albums", error);
 		} finally {
-			setLoading(false);
+			setLoading(() => false);
 		}
 	}, []);
 
