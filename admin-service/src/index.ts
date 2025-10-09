@@ -1,8 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
-import { psql } from "./config/database.js";
 import adminRoutes from "./route.js";
 import cloudinary from "cloudinary";
+import { initSchema } from "./config/initialize-schema.js";
+import { redisClient } from "./config/redis-connection.js";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -10,6 +12,7 @@ const PORT = process.env.PORT;
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 
 // Routes
 app.use('/api/v1', adminRoutes);
@@ -20,38 +23,16 @@ cloudinary.v2.config({
 	api_secret: process.env.CLOUDINARY_API_SECRET as string
 });
 
-const initSchema = async () => {
-	try {
-		await psql`
-			CREATE TABLE IF NOT EXISTS albums(
-				id SERIAL PRIMARY KEY,
-				title VARCHAR(255) NOT NULL,
-				description VARCHAR(255) NOT NULL,
-				thumbnail VARCHAR(255) NOT NULL,
-				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-			)
-		`;
-
-		await psql`
-			CREATE TABLE IF NOT EXISTS songs(
-				id SERIAL PRIMARY KEY,
-				title VARCHAR(255) NOT NULL,
-				description VARCHAR(255) NOT NULL,
-				thumbnail VARCHAR(255),
-				audio VARCHAR(255) NOT NULL,
-				album_id INTEGER REFERENCES albums(id) ON DELETE SET NULL,
-				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-			)
-		`;
-
-		console.log("Database tables initialized successfully");
-	} catch (error) {
-		console.error("Error intializing database tables:", error);
-	}
-};
-
 initSchema().then(() => {
-	app.listen(PORT, () => {
+	app.listen(PORT, async () => {
 		console.log(`Server listening on port ${PORT}`);
+
+		// Redis connection
+		try {
+			await redisClient.connect();
+			console.log('Redis connected');
+		} catch (err) {
+			console.log('Error in connecting to redis', err);
+		}
 	});
 });

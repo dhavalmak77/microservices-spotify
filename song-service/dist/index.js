@@ -2,11 +2,13 @@ import express from "express";
 import dotenv from "dotenv";
 import songRoutes from "./route.js";
 import { redisClient } from "./config/redis-connection.js";
+import cors from "cors";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 // Middleware
 app.use(express.json());
+app.use(cors());
 // Routes
 app.use('/api/v1', songRoutes);
 app.listen(PORT, async () => {
