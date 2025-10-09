@@ -1,5 +1,6 @@
 import AlbumCard from "../components/AlbumCard";
 import Layout from "../components/Layout";
+import Loading from "../components/Loading";
 import SongCard from "../components/SongCard";
 import { useSongData } from "../context/SongContext";
 
@@ -8,7 +9,8 @@ const Index = () => {
 
 	return (
 		<div>
-			<Layout>
+			{loading && <Loading />}
+			{!loading && <Layout>
 				<div className="mb-4">
 					<h1 className="my-5 font-bold text-2xl">Featured Charts</h1>
 					<div className="flex overflow-auto">
@@ -29,7 +31,7 @@ const Index = () => {
 						})}
 					</div>
 				</div>
-			</Layout>
+			</Layout>}
 		</div>
 	)
 }
