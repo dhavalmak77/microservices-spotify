@@ -22,6 +22,7 @@ interface UserContextType {
 	loginUser: (email: string, password: string, navigate: (path: string) => void) => Promise<void>;
 	registerUser: (name: string, email: string, password: string, navigate: (path: string) => void) => Promise<void>;
 	btnLoading: boolean;
+    logoutUser: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -79,6 +80,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 		}
     }
 
+    const logoutUser = () => {
+        setUser(null);
+        setIsAuth(false);
+        localStorage.removeItem("token");
+        toast.success("Logout successfully");
+    }
+
     const fetchUser = async () => {
         try {
             const { data } = await axios.get(`${server}/api/v1/user/me`, {
@@ -101,7 +109,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     }, []);
 
     return (
-		<UserContext.Provider value={{ user, setUser, loading, setLoading, fetchUser, isAuth, loginUser, registerUser, btnLoading }}>
+		<UserContext.Provider value={{ user, setUser, loading, setLoading, fetchUser, isAuth, loginUser, registerUser, btnLoading, logoutUser }}>
 			{children}
 			<Toaster />
 		</UserContext.Provider>

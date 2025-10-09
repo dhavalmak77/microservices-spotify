@@ -4,7 +4,7 @@ import { useUserData } from '../context/UserContext';
 const Navbar = () => {
 	const navigate = useNavigate();
 
-	const { isAuth } = useUserData();
+	const { isAuth, logoutUser } = useUserData();
 
 	return (
 		<>
@@ -27,7 +27,15 @@ const Navbar = () => {
 				<div className='flex item-center gap-4'>
 					<p className='px-4 py-1 bg-white text-black text-[15px] rounded-full cursor-pointer hidden md:block'>Explore Premium</p>
 					<p className='px-4 py-1 bg-white text-black text-[15px] rounded-full cursor-pointer hidden md:block'>Install App</p>
-					{isAuth ? <p className='px-4 py-1 bg-white text-black text-[15px] rounded-full cursor-pointer'>Logout</p> : <p className='px-4 py-1 bg-white text-black text-[15px] rounded-full cursor-pointer' onClick={() => navigate('/login')}>Login</p>}
+					{isAuth ? (
+						<p className='px-4 py-1 bg-white text-black text-[15px] rounded-full cursor-pointer' onClick={logoutUser}>
+							Logout
+						</p>
+					) : (
+						<p className='px-4 py-1 bg-white text-black text-[15px] rounded-full cursor-pointer' onClick={() => navigate('/login')}>
+							Login
+						</p>
+					)}
 				</div>
 			</div>
 
