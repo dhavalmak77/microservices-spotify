@@ -16,7 +16,7 @@ const Album = () => {
 		if (params.id) {
 			fetchAlbumSongs(params.id);
 		}
-	}, [params.id]);
+	}, [params]);
 
 	return (
 		<div>

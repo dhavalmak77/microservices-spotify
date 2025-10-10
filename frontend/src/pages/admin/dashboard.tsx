@@ -49,9 +49,14 @@ const Dashboard = () => {
 			setDescription("");
 			setFile(null);
 			toast.success(data.message);
-		} catch (error: any) {
-			console.error(error);
-			toast.error(error.response?.data?.message || "Error adding album");
+		} catch (error: unknown) {
+			if (axios.isAxiosError(error)) {
+				console.error(error);
+				toast.error(error.response?.data?.message || "Error adding album");
+			} else {
+				console.error(error);
+				toast.error("Error adding album");
+			}
 		} finally {
 			setBtnLoading(false);
 		}
@@ -84,9 +89,14 @@ const Dashboard = () => {
 			setAlbum("");
 			setFile(null);
 			toast.success(data.message);
-		} catch (error: any) {
-			console.error(error);
-			toast.error(error.response?.data?.message || "Error adding song");
+		} catch (error: unknown) {
+			if (axios.isAxiosError(error)) {
+				console.error(error);
+				toast.error(error.response?.data?.message || "Error adding song");
+			} else {
+				console.error(error);
+				toast.error("Error adding song");
+			}
 		} finally {
 			setBtnLoading(false);
 		}
@@ -112,9 +122,14 @@ const Dashboard = () => {
 			fetchSongs();
 			setFile(null);
 			toast.success(data.message);
-		} catch (error: any) {
-			console.error(error);
-			toast.error(error.response?.data?.message || "Error adding song");
+		} catch (error: unknown) {
+			if (axios.isAxiosError(error)) {
+				console.error(error);
+				toast.error(error.response?.data?.message || "Error adding song");
+			} else {
+				console.error(error);
+				toast.error("Error adding song");
+			}
 		} finally {
 			setBtnLoading(false);
 		}
@@ -135,9 +150,14 @@ const Dashboard = () => {
 				fetchAlbums();
 				fetchSongs();
 				toast.success(data.message);
-			} catch (error: any) {
-				console.error(error);
-				toast.error(error.response?.data?.message || "Error deleting album");
+			} catch (error: unknown) {
+				if (axios.isAxiosError(error)) {
+					console.error(error);
+					toast.error(error.response?.data?.message || "Error deleting album");
+				} else {
+					console.error(error);
+					toast.error("Error deleting album");
+				}
 			} finally {
 				setBtnLoading(false);
 			}
@@ -158,9 +178,14 @@ const Dashboard = () => {
 
 				fetchSongs();
 				toast.success(data.message);
-			} catch (error: any) {
-				console.error(error);
-				toast.error(error.response?.data?.message || "Error deleting album");
+			} catch (error: unknown) {
+				if (axios.isAxiosError(error)) {
+					console.error(error);
+					toast.error(error.response?.data?.message || "Error deleting album");
+				} else {
+					console.error(error);
+					toast.error("Error deleting album");
+				}
 			} finally {
 				setBtnLoading(false);
 			}

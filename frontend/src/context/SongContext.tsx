@@ -33,9 +33,9 @@ interface SongContextType {
 	song: Song | null;
 	nextSong: () => void;
 	prevSong: () => void;
-	albumSong?: Song[];
-	albumData?: Album | null;
-	fetchAlbumSongs?: (id: string | undefined) => Promise<void>;
+	albumSong: Song[];
+	albumData: Album | null;
+	fetchAlbumSongs: (id: string | undefined) => Promise<void>;
 }
 
 const SongContext = createContext<SongContextType | undefined>(undefined);
