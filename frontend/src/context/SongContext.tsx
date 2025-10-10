@@ -31,6 +31,9 @@ interface SongContextType {
 	song: Song | null;
 	nextSong: () => void;
 	prevSong: () => void;
+	albumSong?: Song[];
+	albumData?: Album | null;
+	fetchAlbumSongs?: (id: string) => Promise<void>;
 }
 
 const SongContext = createContext<SongContextType | undefined>(undefined);
@@ -47,6 +50,8 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 	const [albums, setAlbums] = useState<Album[]>([]);
 	const [index, setIndex] = useState<number>(0);
+	const [albumSong, setAlbumSong] = useState<Song[]>([]);
+	const [albumData, setAlbumData] = useState<Album | null>(null);
 
 	const fetchSongs = useCallback(async () => {
 		// setLoading(() => true);
@@ -96,6 +101,19 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
 		}
 	}, []);
 
+	const fetchAlbumSongs = useCallback(async (id: string) => {
+		setLoading(() => true);
+		try {
+			const { data } = await axios.get<{ songs: Song[], album: Album }>(`${server}/api/v1/album/${id}`);
+			setAlbumSong(data.songs);
+			setAlbumData(data.album);
+		} catch (error) {
+			console.log("Error while fetch album songs", error);
+		} finally {
+			setLoading(() => false);
+		}
+	}, []);
+
 	const nextSong = useCallback(() => {
 		if (index === songs.length - 1) {
 			setIndex(0);
@@ -130,7 +148,10 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
 			fetchSong,
 			song,
 			nextSong,
-			prevSong
+			prevSong,
+			albumSong,
+			albumData,
+			fetchAlbumSongs
 		}}>{children}</SongContext.Provider>
 	);
 };

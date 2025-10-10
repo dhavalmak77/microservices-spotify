@@ -4,6 +4,8 @@ import Login from "./pages/login";
 import { useUserData } from "./context/UserContext";
 import Loading from "./components/Loading";
 import Register from "./pages/register";
+import Album from "./pages/album";
+import Playlist from "./pages/playlist";
 
 function App() {
 	const { isAuth, loading } = useUserData();
@@ -15,6 +17,8 @@ function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<Index />} />
+					<Route path="/album/:id" element={isAuth ? <Album /> : <Login />} />
+					<Route path="/playlist" element={isAuth ? <Playlist /> : <Login />} />
 					<Route path="/login" element={isAuth ? <Index /> : <Login />} />
 					<Route path="/register" element={isAuth ? <Index /> : <Register />} />
 				</Routes>
