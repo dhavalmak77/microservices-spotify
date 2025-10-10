@@ -27,13 +27,15 @@ interface SongContextType {
 	selectedSong: string | null;
 	setSelectedSong: (id: string) => void;
 	albums: Album[];
+	fetchSongs: () => Promise<void>;
+	fetchAlbums: () => Promise<void>;
 	fetchSong: () => Promise<void>;
 	song: Song | null;
 	nextSong: () => void;
 	prevSong: () => void;
 	albumSong?: Song[];
 	albumData?: Album | null;
-	fetchAlbumSongs?: (id: string) => Promise<void>;
+	fetchAlbumSongs?: (id: string | undefined) => Promise<void>;
 }
 
 const SongContext = createContext<SongContextType | undefined>(undefined);
@@ -101,7 +103,7 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
 		}
 	}, []);
 
-	const fetchAlbumSongs = useCallback(async (id: string) => {
+	const fetchAlbumSongs = useCallback(async (id: string | undefined) => {
 		setLoading(() => true);
 		try {
 			const { data } = await axios.get<{ songs: Song[], album: Album }>(`${server}/api/v1/album/${id}`);
@@ -145,13 +147,15 @@ export const SongProvider: React.FC<SongProviderProps> = ({ children }) => {
 			selectedSong,
 			setSelectedSong,
 			albums,
+			fetchSongs,
 			fetchSong,
 			song,
 			nextSong,
 			prevSong,
 			albumSong,
 			albumData,
-			fetchAlbumSongs
+			fetchAlbumSongs,
+			fetchAlbums
 		}}>{children}</SongContext.Provider>
 	);
 };
